@@ -260,8 +260,8 @@ GameState.prototype.getExplosion = function(x, y) {
     explosion.revive();
 
     // Move the explosion to the given coordinates
-    explosion.x = x + 140;
-    explosion.y = y + 40;
+    explosion.x = x + 50;
+    explosion.y = y + 60;
 
     // Set rotation of the explosion at random for a little variety
     explosion.angle = this.game.rnd.integerInRange(0, 360);
