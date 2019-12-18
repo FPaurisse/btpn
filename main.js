@@ -6,6 +6,10 @@
 var GameState = function(game) {
 };
 
+let points = 0;
+let essais = 0;
+const max_essais = 10;
+
 // Load images and sounds
 GameState.prototype.preload = function() {
     this.game.load.image('canon', '/images/canon.png');
@@ -33,7 +37,7 @@ GameState.prototype.create = function () {
     this.SHOT_DELAY = 300; // milliseconds (10 bullets/3 seconds)
     this.BULLET_SPEED = 900; // pixels/second
     this.NUMBER_OF_BULLETS = 20;
-    this.GRAVITY = 980; // pixels/second/second
+    this.GRAVITY = 800; // pixels/second/second
 
     // Create an object representing our gun
     this.gun = this.game.add.sprite(100, this.game.height - 80, 'canon');
@@ -63,21 +67,25 @@ GameState.prototype.create = function () {
 
     // Create some ground
     this.ground = this.game.add.group();
-    for (var x = 0; x < this.game.width; x += 128) {
+    for (var x = 0; x < game.width; x += 128) {
         // Add the ground blocks, enable physics on each, make them immovable
-        if (x === 384) {
-            var groundBlock = this.game.add.sprite(x, this.game.height - 60, 'fireplace');
-        }else if (x === 640) {
-            var groundBlock = this.game.add.sprite(x, this.game.height - 75, 'fireplace'); 
-        }else if (x === 896) {
-            var groundBlock = this.game.add.sprite(x, this.game.height - 60, 'fireplace'); 
+ 
+        if (x === 256) {
+            var groundBlock = this.game.add.sprite(x, this.game.height -64, 'fireplace');
+        } else if(x === 512){
+            var groundBlock = this.game.add.sprite(x, this.game.height -48, 'fireplace');
+        }else if(x === 768){
+            var groundBlock = this.game.add.sprite(x, this.game.height -48, 'fireplace');
+        }else if(x === 1024){
+            var groundBlock = this.game.add.sprite(x, this.game.height -64, 'fireplace');
         } else {
-            var groundBlock = this.game.add.sprite(x, this.game.height - 64, 'ground');
+            var groundBlock = this.game.add.sprite(x, this.game.height - 32, 'ground');
         }
-        this.game.physics.enable(groundBlock, Phaser.Physics.ARCADE);
-        groundBlock.body.immovable = true;
-        groundBlock.body.allowGravity = false;
-        this.ground.add(groundBlock);
+
+            this.game.physics.enable(groundBlock, Phaser.Physics.ARCADE);
+            groundBlock.body.immovable = true;
+            groundBlock.body.allowGravity = false;
+            this.ground.add(groundBlock);
     }
 
     // Create a group for explosions
@@ -167,13 +175,58 @@ GameState.prototype.update = function() {
     // Check if bullets have collided with the ground
     this.game.physics.arcade.collide(this.bulletPool, this.ground, function(bullet, ground) {
         // Create an explosion
-        if (ground.position === this.ground.children[4].position) {
-            console.log("victoire!")
-        } else {
-            this.getExplosion(bullet.x, bullet.y);
-            console.log("perdu")
-        }
 
+        console.log(this.ground.children)
+
+        if (bullet._bounds.x >= 256 - 32 && bullet._bounds.x <= 256 + 32) {
+            if (this.ground.children[2].visible === false) {
+                console.log("perdu");
+                essais = essais + 1
+                this.getExplosion(bullet.x, bullet.y);
+            } else {
+                console.log("victoire!")
+                points = points + 1
+                this.ground.children[2].visible = false
+            }
+        } else if (bullet._bounds.x >= 512 - 32 && bullet._bounds.x <= 512 + 32) {
+            if (this.ground.children[4].visible === false) {
+                console.log("perdu");
+                essais = essais + 1
+                this.getExplosion(bullet.x, bullet.y);
+            } else {
+                console.log("victoire!")
+                points = points + 1
+                this.ground.children[4].visible = false
+            }
+        } else if (bullet._bounds.x >= 768 - 32 && bullet._bounds.x <= 768 + 32) {
+            if (this.ground.children[6].visible === false) {
+                console.log("perdu");
+                essais = essais + 1
+                this.getExplosion(bullet.x, bullet.y);
+            } else {
+                console.log("victoire!")
+                points = points + 1
+                this.ground.children[6].visible = false
+            }
+        } else if (bullet._bounds.x >= 1024 - 32 && bullet._bounds.x <= 1024 + 32) {
+            if (this.ground.children[8].visible === false) {
+                console.log("perdu");
+                essais = essais + 1
+                this.getExplosion(bullet.x, bullet.y);
+            } else {
+                console.log("victoire!")
+                points = points + 1
+                this.ground.children[8].visible = false
+            }
+        } else {
+                console.log("perdu")
+                essais = essais + 1
+                this.getExplosion(bullet.x, bullet.y);
+            }
+
+        console.log(`Cheminées atteintes : ${points}/4`)
+        console.log(`Pères Noël à balancer : ${max_essais - essais}`)
+        
         // Kill the bullet
         bullet.kill();
     }, null, this);
@@ -243,15 +296,14 @@ GameState.prototype.getExplosion = function(x, y) {
     // If there aren't any available, create a new one
     if (explosion === null) {
         explosion = this.game.add.sprite(0, 0, 'explosion');
-        explosion.anchor.setTo(0.5, 0.5);
+        explosion.anchor.setTo(0, 0);
 
         // Add an animation for the explosion that kills the sprite when the
         // animation is complete
         var animation = explosion.animations.add('boom', [0], 2, false);
-        animation.killOnComplete = false;
+        animation.killOnComplete = true;
 
         // Add the explosion sprite to the group
-        this.explosionGroup.add(explosion);
     }
 
     // Revive the explosion (set it's alive property to true)
@@ -260,11 +312,11 @@ GameState.prototype.getExplosion = function(x, y) {
     explosion.revive();
 
     // Move the explosion to the given coordinates
-    explosion.x = x + 140;
-    explosion.y = y + 40;
+    explosion.x = x;
+    explosion.y = y - 32;
 
     // Set rotation of the explosion at random for a little variety
-    explosion.angle = this.game.rnd.integerInRange(0, 360);
+    explosion.angle = this.game.rnd.integerInRange(0, 0);
 
     // Play the animation
     explosion.animations.play('boom');
@@ -275,6 +327,6 @@ GameState.prototype.getExplosion = function(x, y) {
 
 
 
-var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, 'my-game',null, true);
+var game = new Phaser.Game(1280, window.innerHeight, Phaser.AUTO, 'my-game',null, true);
 
 game.state.add('my-game', GameState, true);
