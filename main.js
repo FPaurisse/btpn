@@ -8,19 +8,21 @@ var GameState = function(game) {
 
 // Load images and sounds
 GameState.prototype.preload = function() {
-    this.game.load.image('bullet', '/assets/gfx/bullet.png');
+    this.game.load.image('background', '/images/bg.png');
+    this.game.load.image('bullet', '/images/santa-claus.png');
     this.game.load.image('ground', '/assets/gfx/ground.png');
     this.game.load.spritesheet('explosion', '/assets/gfx/explosion.png', 128, 128);
 };
 
 // Setup the example
-GameState.prototype.create = function() {
+GameState.prototype.create = function () {
+    
     // Set stage background color
-    this.game.stage.backgroundColor = 0x4488cc;
+    this.game.add.sprite(0, 0, 'background');;
 
     // Define constants
     this.SHOT_DELAY = 300; // milliseconds (10 bullets/3 seconds)
-    this.BULLET_SPEED = 800; // pixels/second
+    this.BULLET_SPEED = 900; // pixels/second
     this.NUMBER_OF_BULLETS = 20;
     this.GRAVITY = 980; // pixels/second/second
 
@@ -94,7 +96,7 @@ GameState.prototype.shootBullet = function() {
     // but you can do it yourself by killing the bullet if
     // its x,y coordinates are outside of the world.
     bullet.checkWorldBounds = true;
-    bullet.outOfBoundsKill = true;
+    bullet.outOfBoundsKill = false;
 
     // Set the bullet position to the gun position.
     bullet.reset(this.gun.x, this.gun.y);
@@ -110,7 +112,12 @@ GameState.prototype.update = function() {
     // Check if bullets have collided with the ground
     this.game.physics.arcade.collide(this.bulletPool, this.ground, function(bullet, ground) {
         // Create an explosion
+        if (ground.position === this.ground.children[4].position) {
+        console.log("victoire!")
+        } else {
+        console.log("perdu")
         this.getExplosion(bullet.x, bullet.y);
+        }
 
         // Kill the bullet
         bullet.kill();
@@ -173,5 +180,5 @@ GameState.prototype.getExplosion = function(x, y) {
     return explosion;
 };
 
-var game = new Phaser.Game(848, 450, Phaser.AUTO, 'game');
-game.state.add('game', GameState, true);
+var game = new Phaser.Game(800, 600, Phaser.AUTO, 'my-game');
+game.state.add('my-game', GameState, true);
