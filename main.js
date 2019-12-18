@@ -12,6 +12,9 @@ GameState.prototype.preload = function() {
     this.game.load.image('bullet', '/images/santa-claus.png');
     this.game.load.image('ground', '/assets/gfx/ground.png');
     this.game.load.spritesheet('explosion', '/assets/gfx/explosion.png', 128, 128);
+    this.game.load.audio('fall-0', '/audio/fall.mp3')
+    this.game.load.audio('fall-1', '/audio/fall1.mp3')
+    this.game.load.audio('fall-2', '/audio/fall2.mp3')
 };
 
 // Setup the example
@@ -35,6 +38,7 @@ GameState.prototype.create = function () {
     // Create an object pool of bullets
     this.bulletPool = this.game.add.group();
     for(var i = 0; i < this.NUMBER_OF_BULLETS; i++) {
+       
         // Create each bullet and add it to the group.
         var bullet = this.game.add.sprite(0, 0, 'bullet');
         this.bulletPool.add(bullet);
@@ -136,6 +140,8 @@ GameState.prototype.update = function() {
     // Shoot a bullet
     if (this.game.input.activePointer.isDown) {
         this.shootBullet();
+        const shout = this.sound.add('fall-0')
+        shout.play()
     }
 };
 
