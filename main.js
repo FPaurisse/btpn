@@ -12,7 +12,7 @@ GameState.prototype.preload = function() {
     this.game.load.image('bullet', '/images/santa-claus.png');
     this.game.load.spritesheet('ground', '/images/snow.png');
     this.game.load.spritesheet('fireplace', '/images/fireplace.png');
-    this.game.load.spritesheet('explosion', '/assets/gfx/explosion.png', 128, 128);
+    this.game.load.spritesheet('explosion', '/images/blood-splatter.png', 128, 128);
 };
 
 // Setup the example
@@ -54,13 +54,13 @@ GameState.prototype.create = function () {
 
     // Create some ground
     this.ground = this.game.add.group();
-    for (var x = 0; x < this.game.width; x += 64) {
+    for (var x = 0; x < this.game.width; x += 128) {
         // Add the ground blocks, enable physics on each, make them immovable
-        if (x === 320) {
+        if (x === 384) {
             var groundBlock = this.game.add.sprite(x, this.game.height - 60, 'fireplace');
         }else if (x === 640) {
             var groundBlock = this.game.add.sprite(x, this.game.height - 75, 'fireplace'); 
-        }else if (x === 960) {
+        }else if (x === 896) {
             var groundBlock = this.game.add.sprite(x, this.game.height - 60, 'fireplace'); 
         } else {
             var groundBlock = this.game.add.sprite(x, this.game.height - 64, 'ground');
@@ -120,11 +120,11 @@ GameState.prototype.update = function() {
     // Check if bullets have collided with the ground
     this.game.physics.arcade.collide(this.bulletPool, this.ground, function(bullet, ground) {
         // Create an explosion
-        if (ground.position === this.ground.children[10].position) {
-        console.log("victoire!")
+        if (ground.position === this.ground.children[4].position) {
+            console.log("victoire!")
         } else {
-        console.log("perdu")
-        this.getExplosion(bullet.x, bullet.y);
+            this.getExplosion(bullet.x, bullet.y);
+            console.log("perdu")
         }
 
         // Kill the bullet
@@ -162,8 +162,8 @@ GameState.prototype.getExplosion = function(x, y) {
 
         // Add an animation for the explosion that kills the sprite when the
         // animation is complete
-        var animation = explosion.animations.add('boom', [0,1,2,3], 60, false);
-        animation.killOnComplete = true;
+        var animation = explosion.animations.add('boom', [0], 2, false);
+        animation.killOnComplete = false;
 
         // Add the explosion sprite to the group
         this.explosionGroup.add(explosion);
@@ -175,8 +175,8 @@ GameState.prototype.getExplosion = function(x, y) {
     explosion.revive();
 
     // Move the explosion to the given coordinates
-    explosion.x = x;
-    explosion.y = y;
+    explosion.x = x + 140;
+    explosion.y = y + 40;
 
     // Set rotation of the explosion at random for a little variety
     explosion.angle = this.game.rnd.integerInRange(0, 360);
