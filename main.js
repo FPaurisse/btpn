@@ -11,7 +11,8 @@ GameState.prototype.preload = function() {
     this.game.load.image('background', '/images/bg.png');
     this.game.load.image('bullet', '/images/santa-claus.png');
     this.game.load.image('ground', '/assets/gfx/ground.png');
-    this.game.load.spritesheet('explosion', '/assets/gfx/explosion.png', 128, 128);
+    this.game.load.spritesheet('explosion', '/images/blood-splatter.png', 128, 128);
+    
 };
 
 // Setup the example
@@ -113,10 +114,10 @@ GameState.prototype.update = function() {
     this.game.physics.arcade.collide(this.bulletPool, this.ground, function(bullet, ground) {
         // Create an explosion
         if (ground.position === this.ground.children[4].position) {
-        console.log("victoire!")
+            console.log("victoire!")
         } else {
-        console.log("perdu")
-        this.getExplosion(bullet.x, bullet.y);
+            this.getExplosion(bullet.x, bullet.y);
+            console.log("perdu")
         }
 
         // Kill the bullet
@@ -154,8 +155,8 @@ GameState.prototype.getExplosion = function(x, y) {
 
         // Add an animation for the explosion that kills the sprite when the
         // animation is complete
-        var animation = explosion.animations.add('boom', [0,1,2,3], 60, false);
-        animation.killOnComplete = true;
+        var animation = explosion.animations.add('boom', [0], 2, false);
+        animation.killOnComplete = false;
 
         // Add the explosion sprite to the group
         this.explosionGroup.add(explosion);
@@ -168,7 +169,7 @@ GameState.prototype.getExplosion = function(x, y) {
 
     // Move the explosion to the given coordinates
     explosion.x = x;
-    explosion.y = y;
+    explosion.y = y + 50;
 
     // Set rotation of the explosion at random for a little variety
     explosion.angle = this.game.rnd.integerInRange(0, 360);
