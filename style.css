@@ -6,7 +6,6 @@ body {
     align-items: center;
 }
 
-#my-game {
-    width: 800px;
-    height: 600px;
+#my-game canvas {
+    border: 1px solid black;
 }
