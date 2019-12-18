@@ -8,17 +8,17 @@ var GameState = function(game) {
 
 // Load images and sounds
 GameState.prototype.preload = function() {
-    this.game.load.image('background', '/images/bg.png');
+    this.game.load.image('canon', '/images/canon.png');
     this.game.load.image('bullet', '/images/santa-claus.png');
-    this.game.load.image('ground', '/assets/gfx/ground.png');
+    this.game.load.spritesheet('ground', '/images/snow.png');
+    this.game.load.spritesheet('fireplace', '/images/fireplace.png');
     this.game.load.spritesheet('explosion', '/assets/gfx/explosion.png', 128, 128);
 };
 
 // Setup the example
 GameState.prototype.create = function () {
-    
-    // Set stage background color
-    this.game.add.sprite(0, 0, 'background');;
+
+    this.game.stage.backgroundColor = null;
 
     // Define constants
     this.SHOT_DELAY = 300; // milliseconds (10 bullets/3 seconds)
@@ -27,7 +27,7 @@ GameState.prototype.create = function () {
     this.GRAVITY = 980; // pixels/second/second
 
     // Create an object representing our gun
-    this.gun = this.game.add.sprite(50, this.game.height - 64, 'bullet');
+    this.gun = this.game.add.sprite(100, this.game.height - 80, 'canon');
 
     // Set the pivot point to the center of the gun
     this.gun.anchor.setTo(0.5, 0.5);
@@ -40,7 +40,7 @@ GameState.prototype.create = function () {
         this.bulletPool.add(bullet);
 
         // Set its pivot point to the center of the bullet
-        bullet.anchor.setTo(0.5, 0.5);
+        bullet.anchor.setTo(-0.4, 0.8);
 
         // Enable physics on the bullet
         this.game.physics.enable(bullet, Phaser.Physics.ARCADE);
@@ -54,9 +54,17 @@ GameState.prototype.create = function () {
 
     // Create some ground
     this.ground = this.game.add.group();
-    for(var x = 0; x < this.game.width; x += 32) {
+    for (var x = 0; x < this.game.width; x += 64) {
         // Add the ground blocks, enable physics on each, make them immovable
-        var groundBlock = this.game.add.sprite(x, this.game.height - 32, 'ground');
+        if (x === 320) {
+            var groundBlock = this.game.add.sprite(x, this.game.height - 60, 'fireplace');
+        }else if (x === 640) {
+            var groundBlock = this.game.add.sprite(x, this.game.height - 75, 'fireplace'); 
+        }else if (x === 960) {
+            var groundBlock = this.game.add.sprite(x, this.game.height - 60, 'fireplace'); 
+        } else {
+            var groundBlock = this.game.add.sprite(x, this.game.height - 64, 'ground');
+        }
         this.game.physics.enable(groundBlock, Phaser.Physics.ARCADE);
         groundBlock.body.immovable = true;
         groundBlock.body.allowGravity = false;
@@ -112,7 +120,7 @@ GameState.prototype.update = function() {
     // Check if bullets have collided with the ground
     this.game.physics.arcade.collide(this.bulletPool, this.ground, function(bullet, ground) {
         // Create an explosion
-        if (ground.position === this.ground.children[4].position) {
+        if (ground.position === this.ground.children[10].position) {
         console.log("victoire!")
         } else {
         console.log("perdu")
@@ -180,5 +188,8 @@ GameState.prototype.getExplosion = function(x, y) {
     return explosion;
 };
 
-var game = new Phaser.Game(800, 600, Phaser.AUTO, 'my-game');
+
+
+var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, 'my-game',null, true);
+
 game.state.add('my-game', GameState, true);
