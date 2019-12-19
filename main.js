@@ -9,6 +9,7 @@ var GameState = function(game) {
 let points = 0;
 let essais = 0;
 const max_essais = 10;
+var emitter;
 
 // Load images and sounds
 GameState.prototype.preload = function() {
@@ -19,6 +20,7 @@ GameState.prototype.preload = function() {
     this.game.load.spritesheet('explosion', '/images/blood-splatter.png', 128, 128);
     game.load.spritesheet('snowflakes', 'images/snowflakes.png', 17, 17);
     game.load.spritesheet('snowflakes_large', 'images/snowflakes-large.png', 64, 64);
+    game.load.image('diamond', '/images/jambe.png')
 };
 
 var max = 0;
@@ -96,7 +98,7 @@ GameState.prototype.create = function () {
     this.game.input.activePointer.x = this.game.width / 2;
     this.game.input.activePointer.y = this.game.height / 2 - 100;
 
-
+    // Snow
     back_emitter = game.add.emitter(game.world.centerX, -32, 600);
     back_emitter.makeParticles('snowflakes', [0, 1, 2, 3, 4, 5]);
     back_emitter.maxParticleScale = 0.6;
@@ -132,6 +134,15 @@ GameState.prototype.create = function () {
     back_emitter.start(false, 14000, 20);
     mid_emitter.start(false, 12000, 40);
     front_emitter.start(false, 6000, 1000);
+
+    //Particule 
+
+    emitter = game.add.emitter(0, 0, 100);
+
+    emitter.makeParticles('diamond');
+    emitter.gravity = 200;
+
+    game.input.onDown.add(particleBurst, this);
 
 };
 
@@ -186,8 +197,8 @@ GameState.prototype.update = function() {
             } else {
                 console.log("victoire!")
                 points = points + 1
+                essais = essais + 1
                 this.ground.children[2].visible = false
-                this.ground.children[2].ignoreChildInput = true
             }
         } else if (bullet._bounds.x >= 512 - 32 && bullet._bounds.x <= 512 + 32) {
             if (this.ground.children[4].visible === false) {
@@ -197,6 +208,7 @@ GameState.prototype.update = function() {
             } else {
                 console.log("victoire!")
                 points = points + 1
+                essais = essais + 1
                 this.ground.children[4].visible = false
             }
         } else if (bullet._bounds.x >= 768 - 32 && bullet._bounds.x <= 768 + 32) {
@@ -207,6 +219,7 @@ GameState.prototype.update = function() {
             } else {
                 console.log("victoire!")
                 points = points + 1
+                essais = essais + 1
                 this.ground.children[6].visible = false
             }
         } else if (bullet._bounds.x >= 1024 - 32 && bullet._bounds.x <= 1024 + 32) {
@@ -217,6 +230,7 @@ GameState.prototype.update = function() {
             } else {
                 console.log("victoire!")
                 points = points + 1
+                essais = essais + 1
                 this.ground.children[8].visible = false
             }
         } else {
@@ -314,7 +328,7 @@ GameState.prototype.getExplosion = function(x, y) {
 
     // Move the explosion to the given coordinates
     explosion.x = x;
-    explosion.y = y - 16;
+    explosion.y = y +50;
 
     // Set rotation of the explosion at random for a little variety
     explosion.angle = this.game.rnd.integerInRange(0, 0);
@@ -322,9 +336,22 @@ GameState.prototype.getExplosion = function(x, y) {
     // Play the animation
     explosion.animations.play('boom');
 
+
+    emitter.x = x +20;
+    emitter.y = y +50;
+
+    //  The first parameter sets the effect to "explode" which means all particles are emitted at once
+    //  The second gives each particle a 2000ms lifespan
+    //  The third is ignored when using burst/explode mode
+    //  The final parameter (10) is how many particles will be emitted in this single burst
+    emitter.start(true, 2000, null, 10);
+
+
     // Return the explosion itself in case we want to do anything else with it
     return explosion;
 };
+
+
 
 
 
