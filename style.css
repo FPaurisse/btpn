@@ -1,42 +1,38 @@
 body {
-    margin:0;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+#my-game {
+    margin:0;
+    position: relative;
+    width: 800px;
+    height: 600px;
+    z-index: 0;
     background: url(./images/bg.png) center no-repeat;
     background-size: cover;
 }
 
 
-.wall {
-    width: 110px;
-    height: 460px;
+.cloud {
+    width: 150px;
+    height: 100px;
     position: absolute;
-    bottom: 0;
+    top: 150px;
     left: 0;
     z-index: 0;
-    background:url(/images/wall.png) center bottom;
-    background-size: 100px;
-}
-
-.socle {
-    width: 64px;
-    height: 71px;
-    margin-right: 0px;
-    margin-left: auto;
-    margin-top: -64px;
-    background:url(/images/socle.png) center top no-repeat;
-    background-size: contain;
+    background:url(/images/wall.png) right bottom no-repeat;
+    background-size: 350px;
 }
 
 .back {
     width: 100%;
-    height: 500px;
+    height: 300px;
     position: absolute;
     bottom: 0px;
     left: 0;
-    z-index: -1;
+    z-index:-1;
     background: url(/images/back.png) center top no-repeat;
     background-size: cover;
     filter: opacity(0.6);

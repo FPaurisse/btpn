@@ -12,10 +12,10 @@ const max_essais = 10;
 
 // Load images and sounds
 GameState.prototype.preload = function() {
-    this.game.load.image('canon', '/images/canon.png');
-    this.game.load.image('bullet', '/images/santa-claus.png');
-    this.game.load.spritesheet('ground', '/images/snow.png');
-    this.game.load.spritesheet('fireplace', '/images/fireplace.png');
+    this.game.load.image('canon', '/images/canon_bis_128.png');
+    this.game.load.image('bullet', '/images/santa_64.png');
+    this.game.load.spritesheet('ground', '/images/snow_64.png');
+    this.game.load.spritesheet('fireplace', '/images/fireplace_64.png');
     this.game.load.spritesheet('explosion', '/images/blood-splatter.png', 128, 128);
     game.load.spritesheet('snowflakes', 'images/snowflakes.png', 17, 17);
     game.load.spritesheet('snowflakes_large', 'images/snowflakes-large.png', 64, 64);
@@ -40,7 +40,7 @@ GameState.prototype.create = function () {
     this.GRAVITY = 800; // pixels/second/second
 
     // Create an object representing our gun
-    this.gun = this.game.add.sprite(100, this.game.height - 530, 'canon');
+    this.gun = this.game.add.sprite(140, this.game.height - 430, 'canon');
 
     // Set the pivot point to the center of the gun
     this.gun.anchor.setTo(0.5, 0.5);
@@ -67,16 +67,16 @@ GameState.prototype.create = function () {
 
     // Create some ground
     this.ground = this.game.add.group();
-    for (var x = 0; x < game.width; x += 128) {
+    for (var x = 0; x < 800; x += 64) {
         // Add the ground blocks, enable physics on each, make them immovable
  
         if (x === 256) {
             var groundBlock = this.game.add.sprite(x, this.game.height -64, 'fireplace');
-        } else if(x === 512){
+        } else if(x === 384){
             var groundBlock = this.game.add.sprite(x, this.game.height -48, 'fireplace');
-        }else if(x === 768){
+        }else if(x === 512){
             var groundBlock = this.game.add.sprite(x, this.game.height -48, 'fireplace');
-        }else if(x === 1024){
+        }else if(x === 640){
             var groundBlock = this.game.add.sprite(x, this.game.height -64, 'fireplace');
         } else {
             var groundBlock = this.game.add.sprite(x, this.game.height - 32, 'ground');
@@ -178,18 +178,7 @@ GameState.prototype.update = function() {
 
         console.log(this.ground.children)
 
-        if (bullet._bounds.x >= 256 - 32 && bullet._bounds.x <= 256 + 32) {
-            if (this.ground.children[2].visible === false) {
-                console.log("perdu");
-                essais = essais + 1
-                this.getExplosion(bullet.x, bullet.y);
-            } else {
-                console.log("victoire!")
-                points = points + 1
-                this.ground.children[2].visible = false
-                this.ground.children[2].ignoreChildInput = true
-            }
-        } else if (bullet._bounds.x >= 512 - 32 && bullet._bounds.x <= 512 + 32) {
+        if (bullet._bounds.x >= 256 - 16 && bullet._bounds.x <= 256 + 16) {
             if (this.ground.children[4].visible === false) {
                 console.log("perdu");
                 essais = essais + 1
@@ -197,9 +186,10 @@ GameState.prototype.update = function() {
             } else {
                 console.log("victoire!")
                 points = points + 1
+                essais = essais + 1
                 this.ground.children[4].visible = false
             }
-        } else if (bullet._bounds.x >= 768 - 32 && bullet._bounds.x <= 768 + 32) {
+        } else if (bullet._bounds.x >= 384 - 16 && bullet._bounds.x <= 384 + 16) {
             if (this.ground.children[6].visible === false) {
                 console.log("perdu");
                 essais = essais + 1
@@ -207,9 +197,10 @@ GameState.prototype.update = function() {
             } else {
                 console.log("victoire!")
                 points = points + 1
+                essais = essais + 1
                 this.ground.children[6].visible = false
             }
-        } else if (bullet._bounds.x >= 1024 - 32 && bullet._bounds.x <= 1024 + 32) {
+        } else if (bullet._bounds.x >= 512 - 16 && bullet._bounds.x <= 512 + 16) {
             if (this.ground.children[8].visible === false) {
                 console.log("perdu");
                 essais = essais + 1
@@ -217,7 +208,19 @@ GameState.prototype.update = function() {
             } else {
                 console.log("victoire!")
                 points = points + 1
+                essais = essais + 1
                 this.ground.children[8].visible = false
+            }
+        } else if (bullet._bounds.x >= 640 - 16 && bullet._bounds.x <= 640 + 16) {
+            if (this.ground.children[10].visible === false) {
+                console.log("perdu");
+                essais = essais + 1
+                this.getExplosion(bullet.x, bullet.y);
+            } else {
+                console.log("victoire!")
+                points = points + 1
+                essais = essais + 1
+                this.ground.children[10].visible = false
             }
         } else {
                 console.log("perdu")
@@ -314,7 +317,7 @@ GameState.prototype.getExplosion = function(x, y) {
 
     // Move the explosion to the given coordinates
     explosion.x = x;
-    explosion.y = y - 16;
+    explosion.y = y - 32;
 
     // Set rotation of the explosion at random for a little variety
     explosion.angle = this.game.rnd.integerInRange(0, 0);
@@ -328,6 +331,6 @@ GameState.prototype.getExplosion = function(x, y) {
 
 
 
-var game = new Phaser.Game(1280, window.innerHeight, Phaser.AUTO, 'my-game',null, true);
+var game = new Phaser.Game(800, 600, Phaser.AUTO, 'my-game',null, true);
 
 game.state.add('my-game', GameState, true);
