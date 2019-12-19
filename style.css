@@ -35,6 +35,7 @@ body {
     background:url(/images/handing.png) center center no-repeat;
     background-size: contain;
     position: absolute;
+    z-index: -1;
     right: 30px;
     top: 30px;
     font-family: 'Mountains of Christmas', cursive;
