@@ -18,7 +18,12 @@ GameState.prototype.preload = function() {
     this.game.load.spritesheet('fireplace', '/images/fireplace_64.png');
     this.game.load.spritesheet('explosion', '/images/blood-splatter.png', 128, 128);
     game.load.spritesheet('snowflakes', 'images/snowflakes.png', 17, 17);
-    this.game.load.audio = ["fall1", "fall2", "fall3", "fall4", "fall5", "fall6"]
+    this.game.load.audio('fall1', '/images/fall1.mp3')
+    this.game.load.audio('fall2', '/images/fall2.mp3')
+    this.game.load.audio('fall3', '/images/fall3.mp3')
+    this.game.load.audio('fall4', '/images/fall4.mp3')
+    this.game.load.audio('fall5', '/images/fall5.mp3')
+    this.game.load.audio('fall6', '/images/fall6.mp3')
     game.load.spritesheet('snowflakes_large', 'images/snowflakes-large.png', 64, 64)
 };
 
@@ -148,6 +153,10 @@ GameState.prototype.shootBullet = function() {
     // Get a dead bullet from the pool
     var bullet = this.bulletPool.getFirstDead();
 
+    const cry = ['fall1', 'fall2', 'fall3', 'fall4', 'fall5', 'fall6']
+    const shout = this.sound.add(cry[Math.floor(Math.random()*cry.length)])
+    shout.play()
+
     // If there aren't any bullets available then don't shoot
     if (bullet === null || bullet === undefined) return;
 
@@ -176,8 +185,6 @@ GameState.prototype.update = function() {
     // Check if bullets have collided with the ground
     this.game.physics.arcade.collide(this.bulletPool, this.ground, function(bullet, ground) {
         // Create an explosion
-
-        console.log(this.ground.children)
 
         if (bullet._bounds.x >= 256 - 16 && bullet._bounds.x <= 256 + 16) {
             if (this.ground.children[4].visible === false) {
@@ -228,9 +235,6 @@ GameState.prototype.update = function() {
                 essais = essais + 1
                 this.getExplosion(bullet.x, bullet.y);
             }
-
-        console.log(`Cheminées atteintes : ${points}/4`)
-        console.log(`Pères Noël à balancer : ${max_essais - essais}`)
         
         // Kill the bullet
         bullet.kill();
@@ -249,8 +253,7 @@ GameState.prototype.update = function() {
     // Shoot a bullet
     if (this.game.input.activePointer.isDown) {
         this.shootBullet();
-    
-    }
+    }  
 
     i++;
 
