@@ -13,7 +13,7 @@ const max_essais = 10;
 // Load images and sounds
 GameState.prototype.preload = function() {
     this.game.load.image('canon', '/images/canon_bis_128.png');
-    this.game.load.image('bullet', '/images/santa_64.png');
+    this.game.load.image('bullet', '/images/santa_bis.png');
     this.game.load.spritesheet('ground', '/images/snow_64.png');
     this.game.load.spritesheet('fireplace', '/images/fireplace_64.png');
     this.game.load.spritesheet('explosion', '/images/blood-splatter.png', 128, 128);
