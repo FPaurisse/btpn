@@ -249,6 +249,7 @@ GameState.prototype.update = function() {
     // Shoot a bullet
     if (this.game.input.activePointer.isDown) {
         this.shootBullet();
+    
     }
 
     i++;
