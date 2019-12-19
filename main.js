@@ -8,20 +8,31 @@ var GameState = function(game) {
 
 // Load images and sounds
 GameState.prototype.preload = function() {
-    this.game.load.image('background', '/images/bg.png');
+    this.game.load.image('canon', '/images/canon.png');
     this.game.load.image('bullet', '/images/santa-claus.png');
     this.game.load.image('ground', '/assets/gfx/ground.png');
     this.game.load.spritesheet('explosion', '/assets/gfx/explosion.png', 128, 128);
     this.game.load.audio('fall-0', '/audio/fall.mp3')
     this.game.load.audio('fall-1', '/audio/fall1.mp3')
     this.game.load.audio('fall-2', '/audio/fall2.mp3')
+    this.game.load.spritesheet('ground', '/images/snow.png');
+    this.game.load.spritesheet('fireplace', '/images/fireplace.png');
+    this.game.load.spritesheet('explosion', '/images/blood-splatter.png', 128, 128);
+    game.load.spritesheet('snowflakes', 'images/snowflakes.png', 17, 17);
+    game.load.spritesheet('snowflakes_large', 'images/snowflakes-large.png', 64, 64);
 };
+
+var max = 0;
+var front_emitter;
+var mid_emitter;
+var back_emitter;
+var update_interval = 4 * 60;
+var i = 0;
 
 // Setup the example
 GameState.prototype.create = function () {
-    
-    // Set stage background color
-    this.game.add.sprite(0, 0, 'background');;
+
+    this.game.stage.backgroundColor = null;
 
     // Define constants
     this.SHOT_DELAY = 300; // milliseconds (10 bullets/3 seconds)
@@ -30,7 +41,7 @@ GameState.prototype.create = function () {
     this.GRAVITY = 980; // pixels/second/second
 
     // Create an object representing our gun
-    this.gun = this.game.add.sprite(50, this.game.height - 64, 'bullet');
+    this.gun = this.game.add.sprite(100, this.game.height - 80, 'canon');
 
     // Set the pivot point to the center of the gun
     this.gun.anchor.setTo(0.5, 0.5);
@@ -44,7 +55,7 @@ GameState.prototype.create = function () {
         this.bulletPool.add(bullet);
 
         // Set its pivot point to the center of the bullet
-        bullet.anchor.setTo(0.5, 0.5);
+        bullet.anchor.setTo(-0.4, 0.8);
 
         // Enable physics on the bullet
         this.game.physics.enable(bullet, Phaser.Physics.ARCADE);
@@ -58,9 +69,17 @@ GameState.prototype.create = function () {
 
     // Create some ground
     this.ground = this.game.add.group();
-    for(var x = 0; x < this.game.width; x += 32) {
+    for (var x = 0; x < this.game.width; x += 128) {
         // Add the ground blocks, enable physics on each, make them immovable
-        var groundBlock = this.game.add.sprite(x, this.game.height - 32, 'ground');
+        if (x === 384) {
+            var groundBlock = this.game.add.sprite(x, this.game.height - 60, 'fireplace');
+        }else if (x === 640) {
+            var groundBlock = this.game.add.sprite(x, this.game.height - 75, 'fireplace'); 
+        }else if (x === 896) {
+            var groundBlock = this.game.add.sprite(x, this.game.height - 60, 'fireplace'); 
+        } else {
+            var groundBlock = this.game.add.sprite(x, this.game.height - 64, 'ground');
+        }
         this.game.physics.enable(groundBlock, Phaser.Physics.ARCADE);
         groundBlock.body.immovable = true;
         groundBlock.body.allowGravity = false;
@@ -72,8 +91,46 @@ GameState.prototype.create = function () {
 
     // Simulate a pointer click/tap input at the center of the stage
     // when the example begins running.
-    this.game.input.activePointer.x = this.game.width/2;
-    this.game.input.activePointer.y = this.game.height/2 - 100;
+    this.game.input.activePointer.x = this.game.width / 2;
+    this.game.input.activePointer.y = this.game.height / 2 - 100;
+
+
+    back_emitter = game.add.emitter(game.world.centerX, -32, 600);
+    back_emitter.makeParticles('snowflakes', [0, 1, 2, 3, 4, 5]);
+    back_emitter.maxParticleScale = 0.6;
+    back_emitter.minParticleScale = 0.2;
+    back_emitter.setYSpeed(20, 100);
+    back_emitter.gravity = 0;
+    back_emitter.width = game.world.width * 1.5;
+    back_emitter.minRotation = 0;
+    back_emitter.maxRotation = 40;
+
+    mid_emitter = game.add.emitter(game.world.centerX, -32, 250);
+    mid_emitter.makeParticles('snowflakes', [0, 1, 2, 3, 4, 5]);
+    mid_emitter.maxParticleScale = 1.2;
+    mid_emitter.minParticleScale = 0.8;
+    mid_emitter.setYSpeed(50, 150);
+    mid_emitter.gravity = 0;
+    mid_emitter.width = game.world.width * 1.5;
+    mid_emitter.minRotation = 0;
+    mid_emitter.maxRotation = 40;
+
+    front_emitter = game.add.emitter(game.world.centerX, -32, 50);
+    front_emitter.makeParticles('snowflakes_large', [0, 1, 2, 3, 4, 5]);
+    front_emitter.maxParticleScale = 1;
+    front_emitter.minParticleScale = 0.5;
+    front_emitter.setYSpeed(100, 200);
+    front_emitter.gravity = 0;
+    front_emitter.width = game.world.width * 1.5;
+    front_emitter.minRotation = 0;
+    front_emitter.maxRotation = 40;
+
+    changeWindDirection();
+
+    back_emitter.start(false, 14000, 20);
+    mid_emitter.start(false, 12000, 40);
+    front_emitter.start(false, 6000, 1000);
+
 };
 
 GameState.prototype.shootBullet = function() {
@@ -117,10 +174,10 @@ GameState.prototype.update = function() {
     this.game.physics.arcade.collide(this.bulletPool, this.ground, function(bullet, ground) {
         // Create an explosion
         if (ground.position === this.ground.children[4].position) {
-        console.log("victoire!")
+            console.log("victoire!")
         } else {
-        console.log("perdu")
-        this.getExplosion(bullet.x, bullet.y);
+            this.getExplosion(bullet.x, bullet.y);
+            console.log("perdu")
         }
 
         // Kill the bullet
@@ -143,7 +200,45 @@ GameState.prototype.update = function() {
         const shout = this.sound.add('fall-0')
         shout.play()
     }
+
+    i++;
+
+    if (i === update_interval)
+    {
+        changeWindDirection();
+        update_interval = Math.floor(Math.random() * 20) * 60; // 0 - 20sec @ 60fps
+        i = 0;
+    }
+
 };
+
+function changeWindDirection() {
+
+    var multi = Math.floor((max + 200) / 4),
+        frag = (Math.floor(Math.random() * 100) - multi);
+    max = max + frag;
+
+    if (max > 200) max = 150;
+    if (max < -200) max = -150;
+
+    setXSpeed(back_emitter, max);
+    setXSpeed(mid_emitter, max);
+    setXSpeed(front_emitter, max);
+
+}
+
+function setXSpeed(emitter, max) {
+
+    emitter.setXSpeed(max - 20, max);
+    emitter.forEachAlive(setParticleXSpeed, this, max);
+
+}
+
+function setParticleXSpeed(particle, max) {
+
+    particle.body.velocity.x = max - Math.floor(Math.random() * 30);
+
+}
 
 // Try to get a used explosion from the explosionGroup.
 // If an explosion isn't available, create a new one and add it to the group.
@@ -160,8 +255,8 @@ GameState.prototype.getExplosion = function(x, y) {
 
         // Add an animation for the explosion that kills the sprite when the
         // animation is complete
-        var animation = explosion.animations.add('boom', [0,1,2,3], 60, false);
-        animation.killOnComplete = true;
+        var animation = explosion.animations.add('boom', [0], 2, false);
+        animation.killOnComplete = false;
 
         // Add the explosion sprite to the group
         this.explosionGroup.add(explosion);
@@ -173,8 +268,8 @@ GameState.prototype.getExplosion = function(x, y) {
     explosion.revive();
 
     // Move the explosion to the given coordinates
-    explosion.x = x;
-    explosion.y = y;
+    explosion.x = x + 50;
+    explosion.y = y + 60;
 
     // Set rotation of the explosion at random for a little variety
     explosion.angle = this.game.rnd.integerInRange(0, 360);
@@ -186,5 +281,8 @@ GameState.prototype.getExplosion = function(x, y) {
     return explosion;
 };
 
-var game = new Phaser.Game(800, 600, Phaser.AUTO, 'my-game');
+
+
+var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, 'my-game',null, true);
+
 game.state.add('my-game', GameState, true);
