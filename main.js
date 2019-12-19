@@ -8,7 +8,7 @@ var GameState = function(game) {
 
 let points = 0;
 let essais = 0;
-const max_essais = 10;
+const max_essais = 8;
 
 // Load images and sounds
 GameState.prototype.preload = function() {
@@ -228,8 +228,10 @@ GameState.prototype.update = function() {
                 this.getExplosion(bullet.x, bullet.y);
             }
 
-        console.log(`Cheminées atteintes : ${points}/4`)
-        console.log(`Pères Noël à balancer : ${max_essais - essais}`)
+
+        document.getElementById("scores").innerHTML = `${points}`;
+        document.getElementById("essais").innerHTML = `${max_essais - essais}`;
+    
         
         // Kill the bullet
         bullet.kill();
