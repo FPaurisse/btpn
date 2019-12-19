@@ -34,8 +34,8 @@ GameState.prototype.create = function () {
     this.game.stage.backgroundColor = null;
 
     // Define constants
-    this.SHOT_DELAY = 300; // milliseconds (10 bullets/3 seconds)
-    this.BULLET_SPEED = 900; // pixels/second
+    this.SHOT_DELAY = 1000; // milliseconds
+    this.BULLET_SPEED = 500; // pixels/second
     this.NUMBER_OF_BULLETS = 20;
     this.GRAVITY = 800; // pixels/second/second
 
