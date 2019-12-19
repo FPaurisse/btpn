@@ -187,6 +187,7 @@ GameState.prototype.update = function() {
                 console.log("victoire!")
                 points = points + 1
                 this.ground.children[2].visible = false
+                this.ground.children[2].ignoreChildInput = true
             }
         } else if (bullet._bounds.x >= 512 - 32 && bullet._bounds.x <= 512 + 32) {
             if (this.ground.children[4].visible === false) {
@@ -312,7 +313,7 @@ GameState.prototype.getExplosion = function(x, y) {
     explosion.revive();
 
     // Move the explosion to the given coordinates
-    explosion.x = x + 108;
+    explosion.x = x;
     explosion.y = y - 32;
 
     // Set rotation of the explosion at random for a little variety
