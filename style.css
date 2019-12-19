@@ -66,6 +66,14 @@ body {
     font-size: 80px;
 }
 
+#win a {
+    font-size: 24px;
+    border: 3px solid #FFF9F0;
+    color: white;
+    text-decoration: none;
+    padding:10px 20px;
+}
+
 .handing {
     width: 300px;
     height: 150px;
