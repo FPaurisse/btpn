@@ -195,8 +195,6 @@ GameState.prototype.update = function () {
     this.game.physics.arcade.collide(this.bulletPool, this.ground, function(bullet, ground) {
         // Create an explosion
 
-        console.log(this.ground.children)
-
         if (bullet._bounds.x >= 384 - 16 && bullet._bounds.x <= 384 + 16) {
             if (this.ground.children[6].visible === false) {
                 console.log("perdu");
