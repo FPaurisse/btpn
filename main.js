@@ -21,9 +21,6 @@ GameState.prototype.preload = function() {
     this.game.load.audio('fall1', '/images/fall1.mp3')
     this.game.load.audio('fall2', '/images/fall2.mp3')
     this.game.load.audio('fall3', '/images/fall3.mp3')
-    this.game.load.audio('fall4', '/images/fall4.mp3')
-    this.game.load.audio('fall5', '/images/fall5.mp3')
-    this.game.load.audio('fall6', '/images/fall6.mp3')
     game.load.spritesheet('snowflakes_large', 'images/snowflakes-large.png', 64, 64)
 };
 
@@ -152,7 +149,7 @@ GameState.prototype.shootBullet = function() {
     // Get a dead bullet from the pool
     var bullet = this.bulletPool.getFirstDead();
 
-    const cry = ['fall1', 'fall2', 'fall3', 'fall4', 'fall5', 'fall6']
+    const cry = ['fall1', 'fall2', 'fall3']
     const shout = this.sound.add(cry[Math.floor(Math.random()*cry.length)])
     shout.play()
 
