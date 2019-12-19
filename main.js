@@ -18,6 +18,7 @@ GameState.prototype.preload = function() {
     this.game.load.spritesheet('fireplace', '/images/fireplace_64.png');
     this.game.load.spritesheet('explosion', '/images/blood-splatter.png', 128, 128);
     game.load.spritesheet('snowflakes', 'images/snowflakes.png', 17, 17);
+    this.game.load.audio = ["fall1", "fall2", "fall3", "fall4", "fall5", "fall6"]
     game.load.spritesheet('snowflakes_large', 'images/snowflakes-large.png', 64, 64)
 };
 
