@@ -18,7 +18,7 @@ GameState.prototype.preload = function() {
     this.game.load.spritesheet('fireplace', '/images/fireplace_64.png');
     this.game.load.spritesheet('explosion', '/images/blood-splatter.png', 128, 128);
     game.load.spritesheet('snowflakes', 'images/snowflakes.png', 17, 17);
-    game.load.spritesheet('snowflakes_large', 'images/snowflakes-large.png', 64, 64);
+    game.load.spritesheet('snowflakes_large', 'images/snowflakes-large.png', 64, 64)
 };
 
 var max = 0;
