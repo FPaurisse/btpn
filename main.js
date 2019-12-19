@@ -36,7 +36,7 @@ GameState.prototype.create = function () {
     // Define constants
     this.SHOT_DELAY = 1000; // milliseconds
     this.BULLET_SPEED = 500; // pixels/second
-    this.NUMBER_OF_BULLETS = 20;
+    this.NUMBER_OF_BULLETS = 10;
     this.GRAVITY = 800; // pixels/second/second
 
     // Create an object representing our gun
@@ -317,7 +317,7 @@ GameState.prototype.getExplosion = function(x, y) {
 
     // Move the explosion to the given coordinates
     explosion.x = x;
-    explosion.y = y - 32;
+    explosion.y = y;
 
     // Set rotation of the explosion at random for a little variety
     explosion.angle = this.game.rnd.integerInRange(0, 0);
