@@ -16,6 +16,23 @@ body {
     font-family: 'Mountains of Christmas', cursive;
 }
 
+#home {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background:url(/images/home.jpg) center center no-repeat;
+    background-size: cover;
+    display: flex;
+    z-index: 10;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 100px;
+    overflow: hidden;
+    box-shadow: inset 0 0 20px #000000; 
+    box-sizing: border-box;
+}
+
 #my-game {
     margin:0;
     position: relative;
@@ -26,7 +43,7 @@ body {
     background-size: cover;
     border-radius: 100px;
     overflow: hidden;
-    box-shadow: inset 0 0 20px #000000; ;
+    box-shadow: inset 0 0 20px #000000; 
     box-sizing: border-box;
 }
 

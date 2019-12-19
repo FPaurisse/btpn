@@ -11,6 +11,11 @@
 <body>
     <div class="game">
         <div id="my-game">
+            <div id="home">
+                <button id="startGame">
+                    Start
+                </button>
+            </div>
             <div id="lose">
                 <p>PERDU</p>
                 <a href="./">Restart</a>
@@ -28,5 +33,11 @@
             <div class="snow"></div>
         </div>
     </div>
+
+    <script>
+        const start = document.getElementById("startGame");
+        start.onclick = () => document.getElementById("home").style.display = "none";
+    </script>
+
 </body>
 </html>

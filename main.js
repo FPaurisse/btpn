@@ -182,12 +182,12 @@ GameState.prototype.shootBullet = function() {
 // The update() method is called every frame
 GameState.prototype.update = function () {
     
-    if (essais === 8) {
-        document.getElementById("lose").style.display = "flex";
-        this.game.paused()
-    }
     if (points === 4) {
         document.getElementById("win").style.display = "flex";
+        this.game.paused()
+    }
+    if (essais === 8) {
+        document.getElementById("lose").style.display = "flex";
         this.game.paused()
     }
     
