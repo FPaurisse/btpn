@@ -64,7 +64,6 @@ GameState.prototype.create = function () {
 
     // Turn on gravity
     game.physics.arcade.gravity.y = this.GRAVITY;
-
     // Create some ground
     this.ground = this.game.add.group();
     for (var x = 0; x < 800; x += 64) {
@@ -171,7 +170,17 @@ GameState.prototype.shootBullet = function() {
 };
 
 // The update() method is called every frame
-GameState.prototype.update = function() {
+GameState.prototype.update = function () {
+    
+    if (essais === 8) {
+        document.getElementById("lose").style.display = "flex";
+        this.game.paused()
+    }
+    if (points === 4) {
+        document.getElementById("win").style.display = "flex";
+        this.game.paused()
+    }
+    
     // Check if bullets have collided with the ground
     this.game.physics.arcade.collide(this.bulletPool, this.ground, function(bullet, ground) {
         // Create an explosion
@@ -227,8 +236,8 @@ GameState.prototype.update = function() {
                 essais = essais + 1
                 this.getExplosion(bullet.x, bullet.y);
             }
-
-
+            
+        
         document.getElementById("scores").innerHTML = `${points}`;
         document.getElementById("essais").innerHTML = `${max_essais - essais}`;
     
@@ -260,6 +269,7 @@ GameState.prototype.update = function() {
         update_interval = Math.floor(Math.random() * 20) * 60; // 0 - 20sec @ 60fps
         i = 0;
     }
+
 
 };
 
@@ -336,3 +346,4 @@ GameState.prototype.getExplosion = function(x, y) {
 var game = new Phaser.Game(900, 600, Phaser.AUTO, 'my-game',null, true);
 
 game.state.add('my-game', GameState, true);
+game.paused = true;
