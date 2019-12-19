@@ -8,7 +8,7 @@ var GameState = function(game) {
 
 let points = 0;
 let essais = 0;
-const max_essais = 10;
+const max_essais = 8;
 
 // Load images and sounds
 GameState.prototype.preload = function() {
@@ -46,7 +46,7 @@ GameState.prototype.create = function () {
     this.GRAVITY = 800; // pixels/second/second
 
     // Create an object representing our gun
-    this.gun = this.game.add.sprite(140, this.game.height - 430, 'canon');
+    this.gun = this.game.add.sprite(268, this.game.height - 430, 'canon');
 
     // Set the pivot point to the center of the gun
     this.gun.anchor.setTo(0.5, 0.5);
@@ -70,19 +70,18 @@ GameState.prototype.create = function () {
 
     // Turn on gravity
     game.physics.arcade.gravity.y = this.GRAVITY;
-
     // Create some ground
     this.ground = this.game.add.group();
     for (var x = 0; x < 800; x += 64) {
         // Add the ground blocks, enable physics on each, make them immovable
  
-        if (x === 256) {
+        if (x === 384) {
             var groundBlock = this.game.add.sprite(x, this.game.height -64, 'fireplace');
-        } else if(x === 384){
-            var groundBlock = this.game.add.sprite(x, this.game.height -48, 'fireplace');
-        }else if(x === 512){
+        } else if(x === 512){
             var groundBlock = this.game.add.sprite(x, this.game.height -48, 'fireplace');
         }else if(x === 640){
+            var groundBlock = this.game.add.sprite(x, this.game.height -48, 'fireplace');
+        }else if(x === 768){
             var groundBlock = this.game.add.sprite(x, this.game.height -64, 'fireplace');
         } else {
             var groundBlock = this.game.add.sprite(x, this.game.height - 32, 'ground');
@@ -181,23 +180,24 @@ GameState.prototype.shootBullet = function() {
 };
 
 // The update() method is called every frame
-GameState.prototype.update = function() {
+GameState.prototype.update = function () {
+    
+    if (essais === 8) {
+        document.getElementById("lose").style.display = "flex";
+        this.game.paused()
+    }
+    if (points === 4) {
+        document.getElementById("win").style.display = "flex";
+        this.game.paused()
+    }
+    
     // Check if bullets have collided with the ground
     this.game.physics.arcade.collide(this.bulletPool, this.ground, function(bullet, ground) {
         // Create an explosion
 
-        if (bullet._bounds.x >= 256 - 16 && bullet._bounds.x <= 256 + 16) {
-            if (this.ground.children[4].visible === false) {
-                console.log("perdu");
-                essais = essais + 1
-                this.getExplosion(bullet.x, bullet.y);
-            } else {
-                console.log("victoire!")
-                points = points + 1
-                essais = essais + 1
-                this.ground.children[4].visible = false
-            }
-        } else if (bullet._bounds.x >= 384 - 16 && bullet._bounds.x <= 384 + 16) {
+        console.log(this.ground.children)
+
+        if (bullet._bounds.x >= 384 - 16 && bullet._bounds.x <= 384 + 16) {
             if (this.ground.children[6].visible === false) {
                 console.log("perdu");
                 essais = essais + 1
@@ -230,11 +230,27 @@ GameState.prototype.update = function() {
                 essais = essais + 1
                 this.ground.children[10].visible = false
             }
+        } else if (bullet._bounds.x >= 768 - 16 && bullet._bounds.x <= 768 + 16) {
+            if (this.ground.children[12].visible === false) {
+                console.log("perdu");
+                essais = essais + 1
+                this.getExplosion(bullet.x, bullet.y);
+            } else {
+                console.log("victoire!")
+                points = points + 1
+                essais = essais + 1
+                this.ground.children[12].visible = false
+            }
         } else {
                 console.log("perdu")
                 essais = essais + 1
                 this.getExplosion(bullet.x, bullet.y);
             }
+            
+        
+        document.getElementById("scores").innerHTML = `${points}`;
+        document.getElementById("essais").innerHTML = `${max_essais - essais}`;
+    
         
         // Kill the bullet
         bullet.kill();
@@ -263,6 +279,7 @@ GameState.prototype.update = function() {
         update_interval = Math.floor(Math.random() * 20) * 60; // 0 - 20sec @ 60fps
         i = 0;
     }
+
 
 };
 
@@ -336,6 +353,7 @@ GameState.prototype.getExplosion = function(x, y) {
 
 
 
-var game = new Phaser.Game(800, 600, Phaser.AUTO, 'my-game',null, true);
+var game = new Phaser.Game(900, 600, Phaser.AUTO, 'my-game',null, true);
 
 game.state.add('my-game', GameState, true);
+game.paused = true;
