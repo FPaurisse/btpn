@@ -152,7 +152,9 @@ GameState.prototype.shootBullet = function() {
     var bullet = this.bulletPool.getFirstDead();
 
     const cry = ['fall1', 'fall3']
-    const shout = this.sound.add(cry[Math.floor(Math.random()*cry.length)])
+    const fire = this.sound.add('canon');
+    const shout = this.sound.add(cry[Math.floor(Math.random() * cry.length)])
+    fire.play()
     shout.play()
 
     // If there aren't any bullets available then don't shoot
