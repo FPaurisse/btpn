@@ -191,9 +191,10 @@ GameState.prototype.update = function () {
         document.getElementById("lose").style.display = "flex";
         this.game.paused()
     }
-    
+        
     // Check if bullets have collided with the ground
-    this.game.physics.arcade.collide(this.bulletPool, this.ground, function(bullet, ground) {
+    this.game.physics.arcade.collide(this.bulletPool, this.ground, function (bullet, ground) {
+
         // Create an explosion
         const victory = this.sound.add('ouyeah');
         if (bullet._bounds.x >= 384 - 16 && bullet._bounds.x <= 384 + 16) {
