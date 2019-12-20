@@ -56,7 +56,7 @@ GameState.prototype.create = function () {
         this.bulletPool.add(bullet);
 
         // Set its pivot point to the center of the bullet
-        bullet.anchor.setTo(-0.4, 0.8);
+        bullet.anchor.setTo(-0.8, 0.58);
 
         // Enable physics on the bullet
         this.game.physics.enable(bullet, Phaser.Physics.ARCADE);
