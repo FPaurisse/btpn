@@ -21,6 +21,8 @@ GameState.prototype.preload = function() {
     this.game.load.audio('fall1', '/images/fall1.mp3')
     this.game.load.audio('fall3', '/images/fall3.mp3')
     this.game.load.audio('splash', '/images/splash.mp3')
+    this.game.load.audio('canon', '/images/canon.mp3')
+    this.game.load.audio('ouyeah', '/images/ouyeah.mp3')
     game.load.spritesheet('snowflakes_large', 'images/snowflakes-large.png', 64, 64)
 };
 
