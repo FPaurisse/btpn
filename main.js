@@ -191,7 +191,7 @@ GameState.prototype.update = function () {
     // Check if bullets have collided with the ground
     this.game.physics.arcade.collide(this.bulletPool, this.ground, function(bullet, ground) {
         // Create an explosion
-
+        const victory = this.sound.add('ouyeah');
         if (bullet._bounds.x >= 384 - 16 && bullet._bounds.x <= 384 + 16) {
             if (this.ground.children[6].visible === false) {
                 console.log("perdu");
@@ -199,6 +199,7 @@ GameState.prototype.update = function () {
                 this.getExplosion(bullet.x, bullet.y);
             } else {
                 console.log("victoire!")
+                victory.play()
                 points = points + 1
                 essais = essais + 1
                 this.ground.children[6].visible = false
@@ -210,6 +211,7 @@ GameState.prototype.update = function () {
                 this.getExplosion(bullet.x, bullet.y);
             } else {
                 console.log("victoire!")
+                victory.play()
                 points = points + 1
                 essais = essais + 1
                 this.ground.children[8].visible = false
@@ -221,6 +223,7 @@ GameState.prototype.update = function () {
                 this.getExplosion(bullet.x, bullet.y);
             } else {
                 console.log("victoire!")
+                victory.play()
                 points = points + 1
                 essais = essais + 1
                 this.ground.children[10].visible = false
@@ -232,6 +235,7 @@ GameState.prototype.update = function () {
                 this.getExplosion(bullet.x, bullet.y);
             } else {
                 console.log("victoire!")
+                victory.play()
                 points = points + 1
                 essais = essais + 1
                 this.ground.children[12].visible = false
