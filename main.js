@@ -196,7 +196,7 @@ GameState.prototype.update = function () {
     this.game.physics.arcade.collide(this.bulletPool, this.ground, function(bullet, ground) {
         // Create an explosion
         const victory = this.sound.add('ouyeah');
-        if (bullet._bounds.x >= 384 - 32 && bullet._bounds.x <= 384 + 32) {
+        if (bullet._bounds.x >= 384 - 16 && bullet._bounds.x <= 384 + 16) {
             if (this.ground.children[6].visible === false) {
                 console.log("perdu");
                 essais = essais + 1
@@ -208,7 +208,7 @@ GameState.prototype.update = function () {
                 essais = essais + 1
                 this.ground.children[6].visible = false
             }
-        } else if (bullet._bounds.x >= 512 - 32 && bullet._bounds.x <= 512 + 32) {
+        } else if (bullet._bounds.x >= 512 - 16 && bullet._bounds.x <= 512 + 16) {
             if (this.ground.children[8].visible === false) {
                 console.log("perdu");
                 essais = essais + 1
@@ -220,7 +220,7 @@ GameState.prototype.update = function () {
                 essais = essais + 1
                 this.ground.children[8].visible = false
             }
-        } else if (bullet._bounds.x >= 640 - 32 && bullet._bounds.x <= 640 + 32) {
+        } else if (bullet._bounds.x >= 640 - 16 && bullet._bounds.x <= 640 + 16) {
             if (this.ground.children[10].visible === false) {
                 console.log("perdu");
                 essais = essais + 1
@@ -232,7 +232,7 @@ GameState.prototype.update = function () {
                 essais = essais + 1
                 this.ground.children[10].visible = false
             }
-        } else if (bullet._bounds.x >= 768 - 32 && bullet._bounds.x <= 768 + 32) {
+        } else if (bullet._bounds.x >= 768 - 16 && bullet._bounds.x <= 768 + 16) {
             if (this.ground.children[12].visible === false) {
                 console.log("perdu");
                 essais = essais + 1
