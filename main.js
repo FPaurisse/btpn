@@ -19,8 +19,8 @@ GameState.prototype.preload = function() {
     this.game.load.spritesheet('explosion', '/images/blood-splatter.png', 128, 128);
     game.load.spritesheet('snowflakes', 'images/snowflakes.png', 17, 17);
     this.game.load.audio('fall1', '/images/fall1.mp3')
-    this.game.load.audio('fall2', '/images/fall2.mp3')
     this.game.load.audio('fall3', '/images/fall3.mp3')
+    this.game.load.audio('splash', '/images/splash.mp3')
     game.load.spritesheet('snowflakes_large', 'images/snowflakes-large.png', 64, 64)
 };
 
@@ -149,7 +149,7 @@ GameState.prototype.shootBullet = function() {
     // Get a dead bullet from the pool
     var bullet = this.bulletPool.getFirstDead();
 
-    const cry = ['fall1', 'fall2', 'fall3']
+    const cry = ['fall1', 'fall3']
     const shout = this.sound.add(cry[Math.floor(Math.random()*cry.length)])
     shout.play()
 
@@ -341,6 +341,8 @@ GameState.prototype.getExplosion = function(x, y) {
 
     // Play the animation
     explosion.animations.play('boom');
+    const crash = this.sound.add('splash');
+    crash.play()
 
     // Return the explosion itself in case we want to do anything else with it
     return explosion;
