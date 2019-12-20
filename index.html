@@ -33,12 +33,16 @@
             <div class="sled"></div>
             <div class="city"></div>
             <div class="snow"></div>
+            <audio src="/images/sound_back.mp3" style="display:none" id="player" loop>
         </div>
     </div>
 
-    <script>
-        const start = document.getElementById("startGame");
-        start.onclick = () => document.getElementById("home").style.display = "none";
+    <script>        
+        document.getElementById('startGame').onclick = function() {
+            document.getElementById("home").style.display = "none";
+            document.getElementById('player').play();
+            return false;
+        }
     </script>
 
 </body>
